@@ -1,14 +1,47 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import './App.css';
 import reportWebVitals from './reportWebVitals';
+import {createHashRouter, Navigate, RouterProvider} from 'react-router-dom'
+import {SignInForm} from "./components/SignInForm";
+import {SignUpForm} from "./components/SignUpForm";
+import {PublicLayout} from './layout/PublicLayout'
+import {HomePage} from "./views/HomePage";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+export const routes = [
+    {
+        path: '/',
+        element: <PublicLayout/>,
+        children: [
+            {
+                path: '',
+                element: <HomePage/>,
+            },
+        ],
+    },
+    {
+        path: '/auth',
+        children: [
+            {
+                path: 'signIn',
+                element: <SignInForm/>,
+            },
+            {
+                path: 'signUp',
+                element: <SignUpForm/>,
+            }
+        ],
+    },
+    {
+        path: '*',
+        element: <Navigate to={'/'}/>
+    }
+]
+const router = createHashRouter(routes)
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+    <RouterProvider router={router}/>,
 );
 
 // If you want to start measuring performance in your app, pass a function
